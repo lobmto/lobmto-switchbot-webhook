@@ -1,0 +1,8 @@
+{
+    "python.defaultInterpreterPath": "~/.local/share/mise/installs/python/3.10.18/bin/python",
+    "python.pythonPath": "~/.local/share/mise/installs/python/3.10.18/bin/python",
+    "python.terminal.activateEnvironment": true,
+    "cSpell.words": [
+        "powertools"
+    ]
+}
