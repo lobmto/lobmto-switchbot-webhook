@@ -18,6 +18,11 @@ Globals: # https://docs.aws.amazon.com/serverless-application-model/latest/devel
   Api:
     TracingEnabled: true
 Resources:
+  SwitchBotS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub "switchbot-webhook-${AWS::AccountId}"
+
   WebhookFunction:
     Type: AWS::Serverless::Function     # More info about Function Resource: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-function.html
     Properties:
@@ -27,6 +32,11 @@ Resources:
       Architectures:
       - x86_64
       Tracing: Active
+      Policies:
+        - S3ReadPolicy:
+            BucketName: !Ref SwitchBotS3Bucket
+        - S3WritePolicy:
+            BucketName: !Ref SwitchBotS3Bucket
       Events:
         WebhookPath:
           Type: Api           # More info about API Event Source: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-property-function-api.html
@@ -39,6 +49,7 @@ Resources:
           POWERTOOLS_SERVICE_NAME: PowertoolsWebhook
           POWERTOOLS_METRICS_NAMESPACE: Powertools
           LOG_LEVEL: INFO
+          S3_BUCKET_NAME: !Ref SwitchBotS3Bucket
       Tags:
         LambdaPowertools: python
 
@@ -64,4 +75,3 @@ Outputs:
   WebhookFunction:
     Description: Webhook Lambda Function ARN
     Value: !GetAtt WebhookFunction.Arn
-
